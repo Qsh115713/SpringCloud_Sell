@@ -14,6 +14,8 @@ public interface ProductService {
     //查询在架的商品
     List<ProductDetail> findUpAll();
 
+    List<ProductDetail> findList(List<String> productIdList);
+
     Page<ProductDetail> findAll(Pageable pageable);
 
     ProductDetail save(ProductDetail productDetail);

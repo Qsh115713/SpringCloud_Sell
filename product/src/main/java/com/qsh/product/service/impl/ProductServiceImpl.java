@@ -46,6 +46,11 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public List<ProductDetail> findList(List<String> productIdList) {
+        return repository.findByProductIdIn(productIdList);
+    }
+
+    @Override
     @Transactional
     public void increaseStock(List<CartDTO> cartDTOList) {
         for (CartDTO cartDTO : cartDTOList) {
@@ -64,7 +69,7 @@ public class ProductServiceImpl implements ProductService {
     @Transactional
     public void decreaseStock(List<CartDTO> cartDTOList) {
         for (CartDTO cartDTO : cartDTOList) {
-            ProductDetail productDetail = repository.findById(cartDTO.getProductId()).orElse(null);;
+            ProductDetail productDetail = repository.findById(cartDTO.getProductId()).orElse(null);
             if (productDetail == null) {
                 throw new SellException(ResultEnum.PRODUCT_NOT_EXIST);
             }

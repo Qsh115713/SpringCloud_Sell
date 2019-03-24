@@ -2,6 +2,7 @@ package com.qsh.product.controller;
 
 import com.qsh.product.dataobject.ProductCategory;
 import com.qsh.product.dataobject.ProductDetail;
+import com.qsh.product.dto.CartDTO;
 import com.qsh.product.enums.ResultStatusEnum;
 import com.qsh.product.service.CategoryService;
 import com.qsh.product.service.ProductService;
@@ -11,9 +12,7 @@ import com.qsh.product.viewobject.ProductVO;
 import com.qsh.product.viewobject.ResultVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +43,7 @@ public class ProductController {
      * 4、构造数据
      */
 
-    @GetMapping("list")
+    @GetMapping("/list")
     public ResultVO list() {
         //1、查询所有的上架商品
         List<ProductDetail> productDetailList = productService.findUpAll();
@@ -74,5 +73,18 @@ public class ProductController {
         }
 
         return ResultVOUtil.success(productVOList);
+    }
+
+    /**
+     * 获取商品列表（给订单服务用）
+     */
+    @PostMapping("/listForOrder")
+    public List<ProductDetail> listForOrder(@RequestBody List<String> productIdList) {
+        return productService.findList(productIdList);
+    }
+
+    @PostMapping("/decreaseStock")
+    public void decreaseStock(@RequestBody List<CartDTO> cartDTOList) {
+        productService.decreaseStock(cartDTOList);
     }
 }
